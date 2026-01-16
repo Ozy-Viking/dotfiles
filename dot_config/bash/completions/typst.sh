@@ -1,1 +1,1 @@
-. $(typst completions bash)
+. <(typst completions bash)
