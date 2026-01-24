@@ -8,16 +8,12 @@ return {
             },
             -- User defined loops
             additions = {
-                { "Foo", "Bar" },
-                { "tic", "tac", "toe" },
             },
             allow_caps_additions = {
-                { "enable", "disable" },
-                { "left",   "up",     "right", "down" },
-                { "north",  "east",   "south", "west" }
-                -- enable → disable
-                -- Enable → Disable
-                -- ENABLE → DISABLE
+                { "enable",  "disable" },
+                { "enabled", "disabled" },
+                { "left",    "up",      "right", "down" },
+                { "north",   "east",    "south", "west" }
             },
         })
     end,

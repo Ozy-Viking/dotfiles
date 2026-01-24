@@ -15,6 +15,7 @@ return {
             "debugpy",
             "codespell",
             "flake8",
+            "tinymist",
         },
     },
     ---@param opts MasonSettings | {ensure_installed: string[]}

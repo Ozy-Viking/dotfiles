@@ -112,8 +112,8 @@ return {
                         { "<leader>ca", vim.lsp.buf.code_action,                            desc = "Code Action",                mode = { "n", "x" },     has = "codeAction" },
                         { "<leader>cc", vim.lsp.codelens.run,                               desc = "Run Codelens",               mode = { "n", "x" },     has = "codeLens" },
                         { "<leader>cC", vim.lsp.codelens.refresh,                           desc = "Refresh & Display Codelens", mode = { "n" },          has = "codeLens" },
-                        { "<leader>cR", function() Snacks.rename.rename_file() end,         desc = "Rename File",                mode = { "n" },          has = { "workspace/didRenameFiles", "workspace/willRenameFiles" } },
-                        { "<leader>cr", vim.lsp.buf.rename,                                 desc = "Rename",                     has = "rename" },
+                        { "<leader>cN", function() Snacks.rename.rename_file() end,         desc = "Rename File",                mode = { "n" },          has = { "workspace/didRenameFiles", "workspace/willRenameFiles" } },
+                        { "<leader>cn", vim.lsp.buf.rename,                                 desc = "Rename",                     has = "rename" },
                         { "<leader>cA", LazyVim.lsp.action.source,                          desc = "Source Action",              has = "codeAction" },
                         {
                             "]]",
@@ -197,6 +197,51 @@ return {
                         -- Additional Language Server settings can be added here
                         settings = {}
                     }
+                },
+                tinymist = {
+                    keys = {
+                        { "<leader>to", "<cmd>OpenPdf<cr>", desc = "Typst Open Pdf" }
+                    },
+                    settings = {
+                        formatterMode = "typstyle",
+                        exportPdf = "never",
+                        semanticTokens = "enabled",
+                        fontPaths = "${workspaceFolder}/fonts",
+                        formatterIndentSize = 4,
+                        lint = {
+                            enabled = false,
+                            when = "onSave"
+                        },
+
+
+                    },
+                    on_attach = function(client, bufnr)
+                        vim.keymap.set("n", "<leader>tp", function()
+                            client:exec_cmd({
+                                title = "pin",
+                                command = "tinymist.pinMain",
+                                arguments = { vim.api.nvim_buf_get_name(0) },
+                            }, { bufnr = bufnr })
+                            vim.fn.setenv("TYPST_ROOT", vim.fs.dirname(vim.api.nvim_buf_get_name(0)))
+                            print("Typst Root set: " .. vim.fs.dirname(vim.api.nvim_buf_get_name(0)))
+                        end, { desc = "[T]inymist [P]in", noremap = true })
+
+
+
+                        vim.keymap.set("n", "<leader>tu", function()
+                            client:exec_cmd({
+
+                                title = "unpin",
+
+                                command = "tinymist.pinMain",
+
+                                arguments = { vim.v.null },
+
+                            }, { bufnr = bufnr })
+
+                            vim.fn.setenv("TYPST_ROOT", nil)
+                        end, { desc = "[T]inymist [U]npin", noremap = true })
+                    end,
                 }
             },
             -- you can do any additional lsp server setup here
@@ -210,6 +255,7 @@ return {
                 -- end,
                 -- Specify * to use this function as a fallback for any server
                 -- ["*"] = function(server, opts) end,
+
             },
         }
         return ret
@@ -324,5 +370,38 @@ return {
                 automatic_enable = { exclude = mason_exclude },
             })
         end
+        require("lspconfig")["tinymist"].setup { -- Alternatively, can be used `vim.lsp.config["tinymist"]`
+
+            -- ...
+
+            on_attach = function(client, bufnr)
+                vim.keymap.set("n", "<leader>tp", function()
+                    client:exec_cmd({
+
+                        title = "pin",
+
+                        command = "tinymist.pinMain",
+
+                        arguments = { vim.api.nvim_buf_get_name(0) },
+
+                    }, { bufnr = bufnr })
+                end, { desc = "[T]inymist [P]in", noremap = true })
+
+
+
+                vim.keymap.set("n", "<leader>tu", function()
+                    client:exec_cmd({
+
+                        title = "unpin",
+
+                        command = "tinymist.pinMain",
+
+                        arguments = { vim.v.null },
+
+                    }, { bufnr = bufnr })
+                end, { desc = "[T]inymist [U]npin", noremap = true })
+            end,
+
+        }
     end),
 }
