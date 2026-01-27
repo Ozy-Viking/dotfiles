@@ -203,15 +203,19 @@ return {
                         { "<leader>to", "<cmd>OpenPdf<cr>", desc = "Typst Open Pdf" }
                     },
                     settings = {
-                        formatterMode = "typstyle",
+                        formatterMode = "typstfmt",
                         exportPdf = "never",
-                        semanticTokens = "enabled",
+                        semanticTokens = "disabled",
                         fontPaths = "${workspaceFolder}/fonts",
                         formatterIndentSize = 4,
                         lint = {
                             enabled = false,
                             when = "onSave"
                         },
+                        completion = {
+                            triggerOnSnippetPlaceholders = true,
+                        },
+                        projectResolution = "lockDatabase"
 
 
                     },
