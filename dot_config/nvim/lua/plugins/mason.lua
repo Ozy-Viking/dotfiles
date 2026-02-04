@@ -16,6 +16,7 @@ return {
             "codespell",
             "flake8",
             "tinymist",
+            "biome",
         },
     },
     ---@param opts MasonSettings | {ensure_installed: string[]}

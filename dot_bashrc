@@ -21,3 +21,4 @@ export PATH=$PATH:/home/zack/.local/share/Steam/steamapps/common/Factorio/bin/x6
 for file in ~/.config/bash/completions/*; do 
     . $file
 done
+. "$HOME/.cargo/env"

@@ -1,0 +1,26 @@
+[mgr]
+show_hidden = true
+sort_dir_first = true
+sort_by = "natural"
+sort_translit = true
+
+[preview]
+# wrap = "yes"
+max_width = 2560 
+max_height = 1440 
+
+
+[plugin]
+
+prepend_previewers = [
+    { url = "*.csv", run = "rich-preview"}, # for csv files
+    { url = "*.md", run = 'piper -- rich --force-terminal -w $w "$1" ' }, # for markdown (.md) files
+    { url = "*.rst", run = "rich-preview"}, # for restructured text (.rst) files
+    { url = "*.ipynb", run = "rich-preview"}, # for jupyter notebooks (.ipynb)
+    { url = "*.json", run = "rich-preview"}, # for json (.json) files
+#    { url = "*.lang_type", run = "rich-preview"} # for particular language files eg. .py, .go., .lua, etc.
+]
+
+# [[plugin.prepend_previewers]]
+# url = "*.md"
+# run  = 'piper -- rich -j --left --panel=rounded --guides --line-numbers --force-terminal "$1"'

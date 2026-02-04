@@ -112,8 +112,8 @@ return {
                         { "<leader>ca", vim.lsp.buf.code_action,                            desc = "Code Action",                mode = { "n", "x" },     has = "codeAction" },
                         { "<leader>cc", vim.lsp.codelens.run,                               desc = "Run Codelens",               mode = { "n", "x" },     has = "codeLens" },
                         { "<leader>cC", vim.lsp.codelens.refresh,                           desc = "Refresh & Display Codelens", mode = { "n" },          has = "codeLens" },
-                        { "<leader>cN", function() Snacks.rename.rename_file() end,         desc = "Rename File",                mode = { "n" },          has = { "workspace/didRenameFiles", "workspace/willRenameFiles" } },
-                        { "<leader>cn", vim.lsp.buf.rename,                                 desc = "Rename",                     has = "rename" },
+                        { "<leader>cR", function() Snacks.rename.rename_file() end,         desc = "Rename File",                mode = { "n" },          has = { "workspace/didRenameFiles", "workspace/willRenameFiles" } },
+                        { "<leader>cr", vim.lsp.buf.rename,                                 desc = "Rename",                     has = "rename" },
                         { "<leader>cA", LazyVim.lsp.action.source,                          desc = "Source Action",              has = "codeAction" },
                         {
                             "]]",
@@ -213,7 +213,7 @@ return {
                             when = "onSave"
                         },
                         completion = {
-                            triggerOnSnippetPlaceholders = true,
+                            triggerOnSnippetPlaceholders = false,
                         },
                         projectResolution = "lockDatabase"
 
@@ -244,6 +244,7 @@ return {
                             }, { bufnr = bufnr })
 
                             vim.fn.setenv("TYPST_ROOT", nil)
+                            print("Typst Root unset from: " .. vim.fs.dirname(vim.api.nvim_buf_get_name(0)))
                         end, { desc = "[T]inymist [U]npin", noremap = true })
                     end,
                 }

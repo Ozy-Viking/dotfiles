@@ -43,6 +43,7 @@ return {
             "query",
             "regex",
             "toml",
+            "typst",
             "tsx",
             "typescript",
             "vim",
