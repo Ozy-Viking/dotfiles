@@ -175,7 +175,7 @@ enter_accept = true
 ## keybinding is defined.  If this is set to "emacs", "vim-insert", or
 ## "vim-normal", the startup keymap mode in the Atuin search is forced to be
 ## the specified one.
-keymap_mode = "vim-normal"
+keymap_mode = "vim-insert"
 
 ## Cursor style in each keymap mode.  If specified, the cursor style is changed
 ## in entering the cursor shape.  Available values are "default" and
@@ -257,7 +257,7 @@ records = true
 
 [daemon]
 ## Enables using the daemon to sync. Requires the daemon to be running in the background. Start it with `atuin daemon`
-enabled = true
+enabled = false
 
 ## How often the daemon should sync in seconds
 sync_frequency = 300
@@ -289,7 +289,7 @@ name = "catppuccin-mocha-blue"
 
 ## Whether the theme manager should output normal or extra information to help fix themes.
 ## Boolean, true or false. If unset, left up to the theme manager.
-# debug = true
+debug = true
 
 [search]
 ## The list of enabled filter modes, in order of priority.
@@ -343,7 +343,7 @@ name = "catppuccin-mocha-blue"
 # columns = ["duration", "command"]
 ##
 ## With wider directory column:
-# columns = ["duration", { type = "directory", width = 30 }, "command"]
+columns = ["duration", { type = "directory", width = 25 }, "command"]
 ##
 ## Show host for multi-machine sync users:
 # columns = ["duration", "time", "host", "command"]
@@ -352,4 +352,9 @@ name = "catppuccin-mocha-blue"
 # columns = ["exit", "duration", "command"]
 ##
 ## Make directory expand instead of command:
-# columns = ["duration", "time", { type = "directory", expand = true }, { type = "command", expand = false }]
+# columns = [
+#     "duration",
+#     "time",
+#     { type = "command", expand = true },
+#     { type = "directory", expand = false },
+# ]
