@@ -4,6 +4,7 @@ return {
     dependencies = {
         "mason.nvim",
         { "mason-org/mason-lspconfig.nvim", config = function() end },
+        "saghen/blink.cmp",
         {
             "folke/neoconf.nvim",
             cmd = "Neoconf",
@@ -17,22 +18,22 @@ return {
             -- Match by filename
             filename = {
                 -- Set custom filetype and indentation config of spaces, 2 per indent
-                ['changelog.txt'] = function(path, bufnr)
-                    if vim.fs.find({ 'info.json' }, { path = vim.fs.dir(path)() }) then
+                ["changelog.txt"] = function(path, bufnr)
+                    if vim.fs.find({ "info.json" }, { path = vim.fs.dir(path)() }) then
                         vim.bo[bufnr].shiftwidth = 2
                         vim.bo[bufnr].tabstop = 2
                         vim.bo[bufnr].softtabstop = 2
                         vim.bo[bufnr].expandtab = true
-                        return 'factorio-changelog'
+                        return "factorio-changelog"
                     end
-                end
+                end,
             },
             -- Match by path pattern
             pattern = {
-                ['.*/locale/.*/.*%.cfg'] = 'factorio-locale'
-            }
+                [".*/locale/.*/.*%.cfg"] = "factorio-locale",
+            },
         })
-        local util = require 'lspconfig.util';
+        local util = require("lspconfig.util")
         ---@class PluginLspOpts
         local ret = {
             -- options for vim.diagnostic.config()
@@ -159,7 +160,7 @@ return {
                                 checkThirdParty = "Apply",
                                 library = {
                                     vim.env.VIMRUNTIME,
-                                    "/home/zack/.local/share/LuaAddons/factorio/library"
+                                    "/home/zack/.local/share/LuaAddons/factorio/library",
                                 },
                             },
                             codeLens = {
@@ -189,18 +190,18 @@ return {
                 fmtk_lsp = {
                     default_config = {
                         -- The command to start the language server
-                        cmd = { 'npx', '--yes', 'factoriomod-debug', 'lsp', '--stdio' },
+                        cmd = { "npx", "--yes", "factoriomod-debug", "lsp", "--stdio" },
                         -- The filetypes that the language server will be launched for
-                        filetypes = { 'factorio-changelog', 'factorio-locale', 'lua' },
+                        filetypes = { "factorio-changelog", "factorio-locale", "lua" },
                         -- Hints to find the project root
-                        root_dir = util.root_pattern('changelog.txt', 'info.json'),
+                        root_dir = util.root_pattern("changelog.txt", "info.json"),
                         -- Additional Language Server settings can be added here
-                        settings = {}
-                    }
+                        settings = {},
+                    },
                 },
                 tinymist = {
                     keys = {
-                        { "<leader>to", "<cmd>OpenPdf<cr>", desc = "Typst Open Pdf" }
+                        { "<leader>to", "<cmd>OpenPdf<cr>", desc = "Typst Open Pdf" },
                     },
                     settings = {
                         formatterMode = "typstfmt",
@@ -210,14 +211,12 @@ return {
                         formatterIndentSize = 4,
                         lint = {
                             enabled = false,
-                            when = "onSave"
+                            when = "onSave",
                         },
                         completion = {
                             triggerOnSnippetPlaceholders = false,
                         },
-                        projectResolution = "lockDatabase"
-
-
+                        projectResolution = "lockDatabase",
                     },
                     on_attach = function(client, bufnr)
                         vim.keymap.set("n", "<leader>tp", function()
@@ -230,8 +229,6 @@ return {
                             print("Typst Root set: " .. vim.fs.dirname(vim.api.nvim_buf_get_name(0)))
                         end, { desc = "[T]inymist [P]in", noremap = true })
 
-
-
                         vim.keymap.set("n", "<leader>tu", function()
                             client:exec_cmd({
 
@@ -240,14 +237,13 @@ return {
                                 command = "tinymist.pinMain",
 
                                 arguments = { vim.v.null },
-
                             }, { bufnr = bufnr })
 
                             vim.fn.setenv("TYPST_ROOT", nil)
                             print("Typst Root unset from: " .. vim.fs.dirname(vim.api.nvim_buf_get_name(0)))
                         end, { desc = "[T]inymist [U]npin", noremap = true })
                     end,
-                }
+                },
             },
             -- you can do any additional lsp server setup here
             -- return true if you don't want this server to be setup with lspconfig
@@ -260,7 +256,6 @@ return {
                 -- end,
                 -- Specify * to use this function as a fallback for any server
                 -- ["*"] = function(server, opts) end,
-
             },
         }
         return ret
@@ -338,7 +333,7 @@ return {
         -- get all the servers that are available through mason-lspconfig
         local have_mason = LazyVim.has("mason-lspconfig.nvim")
         local mason_all = have_mason
-            and vim.tbl_keys(require("mason-lspconfig.mappings").get_mason_map().lspconfig_to_package)
+                and vim.tbl_keys(require("mason-lspconfig.mappings").get_mason_map().lspconfig_to_package)
             or {} --[[ @as string[] ]]
         local mason_exclude = {} ---@type string[]
 
@@ -371,11 +366,14 @@ return {
         local install = vim.tbl_filter(configure, vim.tbl_keys(opts.servers))
         if have_mason then
             require("mason-lspconfig").setup({
-                ensure_installed = vim.list_extend(install, LazyVim.opts("mason-lspconfig.nvim").ensure_installed or {}),
+                ensure_installed = vim.list_extend(
+                    install,
+                    LazyVim.opts("mason-lspconfig.nvim").ensure_installed or {}
+                ),
                 automatic_enable = { exclude = mason_exclude },
             })
         end
-        require("lspconfig")["tinymist"].setup { -- Alternatively, can be used `vim.lsp.config["tinymist"]`
+        require("lspconfig")["tinymist"].setup({ -- Alternatively, can be used `vim.lsp.config["tinymist"]`
 
             -- ...
 
@@ -388,11 +386,8 @@ return {
                         command = "tinymist.pinMain",
 
                         arguments = { vim.api.nvim_buf_get_name(0) },
-
                     }, { bufnr = bufnr })
                 end, { desc = "[T]inymist [P]in", noremap = true })
-
-
 
                 vim.keymap.set("n", "<leader>tu", function()
                     client:exec_cmd({
@@ -402,11 +397,9 @@ return {
                         command = "tinymist.pinMain",
 
                         arguments = { vim.v.null },
-
                     }, { bufnr = bufnr })
                 end, { desc = "[T]inymist [U]npin", noremap = true })
             end,
-
-        }
+        })
     end),
 }
