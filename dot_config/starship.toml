@@ -47,6 +47,7 @@ aliases = {  }
 
 [hostname]
 ssh_only = false
+ssh_symbol = '🌐'
 format = '@[$ssh_symbol](bold blue)[$hostname](bold red)'
 trim_at = '.hankin.io'
 disabled = false
