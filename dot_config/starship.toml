@@ -1,7 +1,7 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 add_newline = true
 command_timeout = 200
-format = "[$username@$hostname$localip$directory$git_branch$git_status]($style)$character"
+format = "[$username$hostname$localip$directory$git_branch$git_status]($style)$character"
 
 [character]
 error_symbol = "[✗](bold cyan)"
@@ -47,6 +47,6 @@ aliases = {  }
 
 [hostname]
 ssh_only = false
-format = '[$ssh_symbol](bold blue)[$hostname](bold red)'
+format = '@[$ssh_symbol](bold blue)[$hostname](bold red)'
 trim_at = '.hankin.io'
 disabled = false
