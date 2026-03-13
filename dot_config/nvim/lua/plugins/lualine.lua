@@ -1,6 +1,9 @@
 return {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
+    dependencies = {
+        "epwalsh/pomo.nvim",
+    },
     init = function()
         vim.g.lualine_laststatus = vim.o.laststatus
         if vim.fn.argc(-1) > 0 then
@@ -41,7 +44,12 @@ return {
                             hint = icons.diagnostics.Hint,
                         },
                     },
-                    { "filetype",                   icon_only = true, separator = "", padding = { left = 1, right = 0 } },
+                    {
+                        "filetype",
+                        icon_only = true,
+                        separator = "",
+                        padding = { left = 1, right = 0 },
+                    },
                     { LazyVim.lualine.pretty_path() },
                 },
                 lualine_x = {
@@ -90,14 +98,32 @@ return {
                     },
                 },
                 lualine_y = {
-                    { "progress", separator = " ",                  padding = { left = 1, right = 0 } },
+
+                    { "progress", separator = " ", padding = { left = 1, right = 0 } },
                     { "location", padding = { left = 0, right = 1 } },
                     { "filetype", padding = { left = 1, right = 1 } },
+                    {
+                        function()
+                            local ok, pomo = pcall(require, "pomo")
+                            if not ok then
+                                return ""
+                            end
+
+                            local timer = pomo.get_first_to_finish()
+                            if timer == nil then
+                                return ""
+                            end
+
+                            return "󰄉 " .. tostring(timer)
+                        end,
+                    },
                 },
                 lualine_z = {
-                    function()
-                        return " " .. os.date("%R")
-                    end,
+                    {
+                        function()
+                            return " " .. os.date("%R")
+                        end,
+                    },
                 },
             },
             extensions = { "neo-tree", "lazy", "fzf" },
