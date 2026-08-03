@@ -1,0 +1,18 @@
+{
+    "browser": {
+        "browserName": "chromium",
+        "launchOptions": {
+            "headless": false,
+            "executablePath": "/usr/bin/chromium"
+        }
+    },
+    "capabilities": [
+        "core",
+        "network",
+        "storage",
+        "testing",
+        "vision",
+        "pdf",
+        "devtools"
+    ]
+}

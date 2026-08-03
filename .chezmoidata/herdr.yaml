@@ -1,0 +1,4 @@
+herdr:
+  plugins:
+    - cloudmanic/herdr-plus
+    - JanTvrdik/herdr-command-palette

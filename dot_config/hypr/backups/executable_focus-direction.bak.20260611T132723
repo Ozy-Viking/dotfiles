@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+direction="${1:-}"
+
+case "$direction" in
+  l|r|u|d) ;;
+  *) exit 2 ;;
+esac
+
+active_json="$(hyprctl activewindow -j)"
+clients_json="$(hyprctl clients -j)"
+active_address="$(jq -r '.address // empty' <<<"$active_json")"
+
+[[ -n "$active_address" ]] || exit 0
+
+hyprctl --batch "dispatch movefocus $direction" >/dev/null
+new_active_address="$(hyprctl activewindow -j | jq -r '.address // empty')"
+
+[[ "$new_active_address" != "$active_address" ]] && exit 0
+
+target="$(jq -r --arg direction "$direction" --arg active_address "$active_address" --argjson active "$active_json" '
+  def abs: if . < 0 then -. else . end;
+
+  def center($window): {
+    x: ($window.at[0] + ($window.size[0] / 2)),
+    y: ($window.at[1] + ($window.size[1] / 2))
+  };
+
+  center($active) as $active_center |
+  [
+    .[]
+    | select(.address != $active_address)
+    | select((.mapped // true) == true)
+    | select((.hidden // false) == false)
+    | center(.) as $candidate_center
+    | . + {
+        __dx: ($candidate_center.x - $active_center.x),
+        __dy: ($candidate_center.y - $active_center.y)
+      }
+    | select(
+        ($direction == "l" and .__dx < 0) or
+        ($direction == "r" and .__dx > 0) or
+        ($direction == "u" and .__dy < 0) or
+        ($direction == "d" and .__dy > 0)
+      )
+    | . + {
+        __primary: (if $direction == "l" then -.__dx elif $direction == "r" then .__dx elif $direction == "u" then -.__dy else .__dy end),
+        __secondary: (if ($direction == "l" or $direction == "r") then (.__dy | abs) else (.__dx | abs) end)
+      }
+  ]
+  | sort_by(.__primary + (.__secondary / 10000))
+  | first.address // empty
+' <<<"$clients_json")"
+
+[[ -n "$target" ]] || exit 0
+
+hyprctl dispatch focuswindow "address:$target"

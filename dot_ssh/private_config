@@ -1,0 +1,34 @@
+Host *
+	IdentityAgent ~/.1password/agent.sock
+
+Host rpi1
+    HostName 10.5.0.53
+    # HostName 10.5.41.149
+
+Host docker1
+    HostName 10.5.20.1
+
+Host pve1
+    HostName pve.hankin.io 
+    User root
+
+Host ai
+    HostName 10.5.5.215
+
+Host laptop
+    HostName 10.2.35.78
+
+Host dokploy
+    HostName 10.5.63.237
+
+Host nas
+    HostName 10.5.161.81
+    User zack
+    Port 22000
+
+Host onedev
+    HostName onedev.hankin.io
+    User git
+
+Host factorio
+    HostName 85.10.201.147

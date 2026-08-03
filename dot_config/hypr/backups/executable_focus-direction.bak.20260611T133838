@@ -1,0 +1,119 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+dry_run=false
+
+if [[ "${1:-}" == "--dry-run" ]]; then
+  dry_run=true
+  shift
+fi
+
+direction="${1:-}"
+
+case "$direction" in
+  l|r|u|d) ;;
+  *) exit 2 ;;
+esac
+
+active_json="$(hyprctl activewindow -j)"
+clients_json="$(hyprctl clients -j)"
+active_address="$(jq -r '.address // empty' <<<"$active_json")"
+
+[[ -n "$active_address" ]] || exit 0
+
+result="$(jq -r --arg direction "$direction" --arg active_address "$active_address" --argjson active "$active_json" '
+  def center($window): {
+    x: ($window.at[0] + ($window.size[0] / 2)),
+    y: ($window.at[1] + ($window.size[1] / 2))
+  };
+
+  def with_center_and_delta($active_center):
+    center(.) as $candidate_center
+    | . + {
+        __cx: $candidate_center.x,
+        __cy: $candidate_center.y,
+        __dx: ($candidate_center.x - $active_center.x),
+        __dy: ($candidate_center.y - $active_center.y)
+      };
+
+  def debug_candidate:
+    {
+      address,
+      class,
+      title,
+      monitor,
+      workspace: .workspace.name,
+      at,
+      size,
+      center: { x: .__cx, y: .__cy },
+      delta: { x: .__dx, y: .__dy },
+      primary: .__primary,
+      secondary: .__secondary
+    };
+
+  def active_debug($active_center):
+    {
+      address: $active.address,
+      class: $active.class,
+      title: $active.title,
+      monitor: $active.monitor,
+      workspace: $active.workspace.name,
+      at: $active.at,
+      size: $active.size,
+      center: $active_center
+    };
+
+  center($active) as $active_center |
+  (
+    [
+      .[]
+      | select((.mapped // true) == true)
+      | select((.hidden // false) == false)
+      | with_center_and_delta($active_center)
+    ]
+    | map(. + {
+        __primary: (if ($direction == "l" or $direction == "r") then .__cx else .__cy end),
+        __secondary: (if ($direction == "l" or $direction == "r") then .__cy else .__cx end)
+      })
+    | sort_by(.__primary, .__secondary)
+  ) as $ordered_windows |
+  ($ordered_windows | map(.address) | index($active_address)) as $active_index |
+  ($ordered_windows | length) as $window_count |
+  if $active_index == null or $window_count < 2 then
+    {
+      mode: "none",
+      direction: $direction,
+      active: active_debug($active_center),
+      activeIndex: $active_index,
+      targetIndex: null,
+      target: null,
+      orderedWindows: ($ordered_windows | map(debug_candidate))
+    }
+  else
+    (if ($direction == "r" or $direction == "d") then
+      if $active_index == ($window_count - 1) then 0 else ($active_index + 1) end
+    else
+      if $active_index == 0 then ($window_count - 1) else ($active_index - 1) end
+    end) as $target_index |
+    {
+      mode: (if (($direction == "r" or $direction == "d") and $target_index == 0) or (($direction == "l" or $direction == "u") and $target_index == ($window_count - 1)) then "wrap" else "directional" end),
+      direction: $direction,
+      active: active_debug($active_center),
+      activeIndex: $active_index,
+      targetIndex: $target_index,
+      target: ($ordered_windows[$target_index] | debug_candidate),
+      orderedWindows: ($ordered_windows | map(debug_candidate))
+    }
+  end
+' <<<"$clients_json")"
+
+if [[ "$dry_run" == true ]]; then
+  jq . <<<"$result"
+  exit 0
+fi
+
+target="$(jq -r '.target.address // empty' <<<"$result")"
+
+[[ -n "$target" ]] || exit 0
+
+hyprctl dispatch focuswindow "address:$target"

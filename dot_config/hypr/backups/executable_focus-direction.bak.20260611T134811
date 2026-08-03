@@ -1,0 +1,156 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+dry_run=false
+
+if [[ "${1:-}" == "--dry-run" ]]; then
+  dry_run=true
+  shift
+fi
+
+direction="${1:-}"
+
+case "$direction" in
+  l|r|u|d) ;;
+  *) exit 2 ;;
+esac
+
+active_json="$(hyprctl activewindow -j)"
+clients_json="$(hyprctl clients -j)"
+active_address="$(jq -r '.address // empty' <<<"$active_json")"
+
+[[ -n "$active_address" ]] || exit 0
+
+result="$(jq -r --arg direction "$direction" --arg active_address "$active_address" --argjson active "$active_json" '
+  def center($window): {
+    x: ($window.at[0] + ($window.size[0] / 2)),
+    y: ($window.at[1] + ($window.size[1] / 2))
+  };
+
+  def decorate($active_center):
+    center(.) as $candidate_center
+    | . + {
+        __cx: $candidate_center.x,
+        __cy: $candidate_center.y,
+        __dx: ($candidate_center.x - $active_center.x),
+        __dy: ($candidate_center.y - $active_center.y)
+      };
+
+  def debug_window:
+    {
+      address,
+      class,
+      title,
+      monitor,
+      workspace: .workspace.name,
+      at,
+      size,
+      center: { x: .__cx, y: .__cy },
+      delta: { x: .__dx, y: .__dy }
+    };
+
+  def active_debug($active_center):
+    {
+      address: $active.address,
+      class: $active.class,
+      title: $active.title,
+      monitor: $active.monitor,
+      workspace: $active.workspace.name,
+      at: $active.at,
+      size: $active.size,
+      center: $active_center
+    };
+
+  center($active) as $active_center |
+  ([
+    .[]
+    | select((.mapped // true) == true)
+    | select((.hidden // false) == false)
+    | decorate($active_center)
+  ]) as $windows |
+  ($windows | map(.address) | index($active_address)) as $active_index |
+  ($windows | sort_by(.__cx, .__cy)) as $by_x |
+  ($windows | sort_by(.__cy, .__cx)) as $by_y |
+  if $active_index == null or ($windows | length) < 2 then
+    {
+      mode: "none",
+      reason: "fewer than two focusable windows or active window not found",
+      direction: $direction,
+      active: active_debug($active_center),
+      target: null,
+      isGlobalEdge: false,
+      nativeAction: null,
+      orderedWindows: ($windows | map(debug_window))
+    }
+  elif $direction == "l" and $active_address == $by_x[0].address then
+    {
+      mode: "global-wrap",
+      reason: "active window is global left edge",
+      direction: $direction,
+      active: active_debug($active_center),
+      target: ($by_x[-1] | debug_window),
+      isGlobalEdge: true,
+      nativeAction: null,
+      orderedWindows: ($by_x | map(debug_window))
+    }
+  elif $direction == "r" and $active_address == $by_x[-1].address then
+    {
+      mode: "global-wrap",
+      reason: "active window is global right edge",
+      direction: $direction,
+      active: active_debug($active_center),
+      target: ($by_x[0] | debug_window),
+      isGlobalEdge: true,
+      nativeAction: null,
+      orderedWindows: ($by_x | map(debug_window))
+    }
+  elif $direction == "u" and $active_address == $by_y[0].address then
+    {
+      mode: "global-wrap",
+      reason: "active window is global top edge",
+      direction: $direction,
+      active: active_debug($active_center),
+      target: ($by_y[-1] | debug_window),
+      isGlobalEdge: true,
+      nativeAction: null,
+      orderedWindows: ($by_y | map(debug_window))
+    }
+  elif $direction == "d" and $active_address == $by_y[-1].address then
+    {
+      mode: "global-wrap",
+      reason: "active window is global bottom edge",
+      direction: $direction,
+      active: active_debug($active_center),
+      target: ($by_y[0] | debug_window),
+      isGlobalEdge: true,
+      nativeAction: null,
+      orderedWindows: ($by_y | map(debug_window))
+    }
+  else
+    {
+      mode: "native",
+      reason: "active window is not at the global edge for this direction",
+      direction: $direction,
+      active: active_debug($active_center),
+      target: null,
+      isGlobalEdge: false,
+      nativeAction: "hyprctl dispatch movefocus \($direction)",
+      orderedWindows: (if ($direction == "l" or $direction == "r") then ($by_x | map(debug_window)) else ($by_y | map(debug_window)) end)
+    }
+  end
+' <<<"$clients_json")"
+
+if [[ "$dry_run" == true ]]; then
+  jq . <<<"$result"
+  exit 0
+fi
+
+mode="$(jq -r '.mode' <<<"$result")"
+
+if [[ "$mode" == "global-wrap" ]]; then
+  target="$(jq -r '.target.address // empty' <<<"$result")"
+  [[ -n "$target" ]] || exit 0
+  hyprctl dispatch focuswindow "address:$target"
+else
+  hyprctl --batch "dispatch movefocus $direction" >/dev/null
+fi

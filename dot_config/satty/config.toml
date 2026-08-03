@@ -1,0 +1,58 @@
+# Satty configuration for Omarchy.
+#
+# Satty 0.20.x expects settings inside sections like [general], [font],
+# [keybinds], and [color-palette]. Command-line flags still override this file.
+
+[general]
+copy-command = "wl-copy"
+actions-on-enter = ["save-to-file", "copy-filepath-to-clipboard","save-to-clipboard", "exit"]
+save-after-copy = false
+annotation-size-factor = 0.5
+
+# Uncomment and adjust these when you want to change defaults.
+# fullscreen = true
+# early-exit = false
+# corner-roundness = 12
+# initial-tool = "brush"
+# default-hide-toolbars = false
+# focus-toggles-toolbars = false
+# default-fill-shapes = false
+# primary-highlighter = "block"
+disable-notifications = true
+# actions-on-escape = ["exit"]
+actions-on-right-click = ["save-to-clipboard"]
+# no-window-decoration = true
+# brush-smooth-history-size = 0
+
+[keybinds]
+# Tool selection keyboard shortcuts.
+# pointer = "p"
+# crop = "c"
+# brush = "b"
+# line = "i"
+# arrow = "z"
+# rectangle = "r"
+# ellipse = "e"
+# text = "t"
+# marker = "m"
+# blur = "u"
+# highlight = "g"
+
+[font]
+# family = "Roboto"
+# style = "Regular"
+
+[color-palette]
+palette = [
+    "#ffffff", # White
+    "#000000", # black
+  "#f38ba8", # red / errors
+  "#fab387", # peach / callouts
+  "#f9e2af", # yellow / highlights
+  "#a6e3a1", # green / success
+  "#89b4fa", # blue / focus
+  "#cba6f7"  # mauve / secondary notes
+]
+
+custom = [
+]

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+active_workspace="$(hyprctl activeworkspace -j | jq -r '.id')"
+current_layout="$(hyprctl activeworkspace -j | jq -r '.tiledLayout')"
+
+case "$current_layout" in
+  dwindle) next_layout=scrolling ;;
+  scrolling) next_layout=master ;;
+  master) next_layout=dwindle ;;
+  *) next_layout=dwindle ;;
+esac
+
+hyprctl keyword workspace "$active_workspace, layout:$next_layout"
+notify-send -u low "󱂬    Workspace layout set to $next_layout"

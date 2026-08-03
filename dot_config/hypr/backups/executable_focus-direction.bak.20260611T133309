@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+direction="${1:-}"
+
+case "$direction" in
+  l|r|u|d) ;;
+  *) exit 2 ;;
+esac
+
+active_json="$(hyprctl activewindow -j)"
+clients_json="$(hyprctl clients -j)"
+active_address="$(jq -r '.address // empty' <<<"$active_json")"
+
+[[ -n "$active_address" ]] || exit 0
+
+target="$(jq -r --arg direction "$direction" --arg active_address "$active_address" --argjson active "$active_json" '
+  def abs: if . < 0 then -. else . end;
+
+  def center($window): {
+    x: ($window.at[0] + ($window.size[0] / 2)),
+    y: ($window.at[1] + ($window.size[1] / 2))
+  };
+
+  def with_center_and_delta($active_center):
+    center(.) as $candidate_center
+    | . + {
+        __cx: $candidate_center.x,
+        __cy: $candidate_center.y,
+        __dx: ($candidate_center.x - $active_center.x),
+        __dy: ($candidate_center.y - $active_center.y)
+      };
+
+  center($active) as $active_center |
+  (
+    [
+      .[]
+      | select(.address != $active_address)
+      | select((.mapped // true) == true)
+      | select((.hidden // false) == false)
+      | with_center_and_delta($active_center)
+    ]
+  ) as $candidates |
+  ($candidates
+    | map(
+      select(
+          ($direction == "l" and .__dx < 0) or
+          ($direction == "r" and .__dx > 0) or
+          ($direction == "u" and .__dy < 0) or
+          ($direction == "d" and .__dy > 0)
+        )
+      | . + {
+          __primary: (if $direction == "l" then -.__dx elif $direction == "r" then .__dx elif $direction == "u" then -.__dy else .__dy end),
+          __secondary: (if ($direction == "l" or $direction == "r") then (.__dy | abs) else (.__dx | abs) end)
+        }
+    )
+    | sort_by(.__primary + (.__secondary / 10000))
+  ) as $directional_candidates |
+  if ($directional_candidates | length) > 0 then
+    $directional_candidates[0].address
+  else
+    ($candidates
+      | map(. + {
+          __primary: (if $direction == "l" then -.__cx elif $direction == "r" then .__cx elif $direction == "u" then -.__cy else .__cy end),
+          __secondary: (if ($direction == "l" or $direction == "r") then (.__dy | abs) else (.__dx | abs) end)
+        })
+      | sort_by(.__primary + (.__secondary / 10000))
+    ) as $wrap_candidates |
+    if ($wrap_candidates | length) > 0 then $wrap_candidates[0].address else empty end
+  end
+' <<<"$clients_json")"
+
+[[ -n "$target" ]] || exit 0
+
+hyprctl dispatch focuswindow "address:$target"

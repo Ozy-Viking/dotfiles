@@ -29,8 +29,6 @@ return {
         "folke/which-key.nvim",
     },
     config = function()
-        local opencode_cmd = "opencode --port"
-        local right_terminal_opts = { win = { position = "right" } }
         local wk = require("which-key")
         wk.add({
             -- { "<leader>w", proxy = "<c-w>", group = "windows" }, -- proxy to window mappings
@@ -58,7 +56,7 @@ return {
                 {
                     "<leader>a.",
                     function()
-                        require("snacks.terminal").toggle(opencode_cmd, right_terminal_opts)
+                        require("opencode").toggle()
                     end,
                     desc = "Toggle opencode (right)",
                 },
@@ -80,11 +78,7 @@ return {
         })
         ---@type opencode.Opts
         vim.g.opencode_opts = {
-            server = {
-                start = function()
-                    require("snacks.terminal").open(opencode_cmd, right_terminal_opts)
-                end,
-            },
+            -- Your configuration, if any; goto definition on the type or field for details
         }
 
         vim.o.autoread = true -- Required for `opts.events.reload`

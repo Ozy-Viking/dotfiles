@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if ! command -v herdr >/dev/null 2>&1; then
+    printf '%s\n' \
+        'herdr must be installed before its plugins can be installed' >&2
+    exit 1
+fi
+
+plugins=(
+{{ range .herdr.plugins }}
+    {{ . | quote }}
+{{ end }}
+)
+
+for plugin in "${plugins[@]}"; do
+    printf 'Installing Herdr plugin: %s\n' "$plugin"
+    herdr plugin install "$plugin" --yes
+done

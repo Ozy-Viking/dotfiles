@@ -1,0 +1,164 @@
+return {
+    "aserowy/tmux.nvim",
+
+    keys = {
+        -- Navigation: Ctrl + h/j/k/l
+        {
+            "<C-h>",
+            function()
+                require("tmux").move_left()
+            end,
+            mode = "n",
+            desc = "Tmux/Nvim move left",
+        },
+        {
+            "<C-j>",
+            function()
+                require("tmux").move_bottom()
+            end,
+            mode = "n",
+            desc = "Tmux/Nvim move down",
+        },
+        {
+            "<C-k>",
+            function()
+                require("tmux").move_top()
+            end,
+            mode = "n",
+            desc = "Tmux/Nvim move up",
+        },
+        {
+            "<C-l>",
+            function()
+                require("tmux").move_right()
+            end,
+            mode = "n",
+            desc = "Tmux/Nvim move right",
+        },
+
+        -- Optional: tmux window navigation
+        {
+            "<C-n>",
+            function()
+                require("tmux").next_window()
+            end,
+            mode = "n",
+            desc = "Tmux next window",
+        },
+        {
+            "<C-p>",
+            function()
+                require("tmux").previous_window()
+            end,
+            mode = "n",
+            desc = "Tmux previous window",
+        },
+
+        -- Resize: Alt + h/j/k/l
+        {
+            "<M-h>",
+            function()
+                require("tmux").resize_left()
+            end,
+            mode = "n",
+            desc = "Tmux/Nvim resize left",
+        },
+        {
+            "<M-j>",
+            function()
+                require("tmux").resize_bottom()
+            end,
+            mode = "n",
+            desc = "Tmux/Nvim resize down",
+        },
+        {
+            "<M-k>",
+            function()
+                require("tmux").resize_top()
+            end,
+            mode = "n",
+            desc = "Tmux/Nvim resize up",
+        },
+        {
+            "<M-l>",
+            function()
+                require("tmux").resize_right()
+            end,
+            mode = "n",
+            desc = "Tmux/Nvim resize right",
+        },
+
+        -- Swap panes: Ctrl + Alt + h/j/k/l
+        {
+            "<C-M-h>",
+            function()
+                require("tmux").swap_left()
+            end,
+            mode = "n",
+            desc = "Tmux/Nvim swap left",
+        },
+        {
+            "<C-M-j>",
+            function()
+                require("tmux").swap_bottom()
+            end,
+            mode = "n",
+            desc = "Tmux/Nvim swap down",
+        },
+        {
+            "<C-M-k>",
+            function()
+                require("tmux").swap_top()
+            end,
+            mode = "n",
+            desc = "Tmux/Nvim swap up",
+        },
+        {
+            "<C-M-l>",
+            function()
+                require("tmux").swap_right()
+            end,
+            mode = "n",
+            desc = "Tmux/Nvim swap right",
+        },
+    },
+
+    opts = {
+        copy_sync = {
+            enable = false,
+            ignore_buffers = { empty = false },
+            redirect_to_clipboard = false,
+            register_offset = 0,
+            sync_clipboard = false,
+            sync_registers = false,
+            sync_registers_keymap_put = true,
+            sync_registers_keymap_reg = true,
+            sync_deletes = false,
+            sync_unnamed = false,
+        },
+
+        navigation = {
+            cycle_navigation = true,
+
+            -- Important: disable plugin defaults because we define them above.
+            enable_default_keybindings = false,
+
+            persist_zoom = false,
+        },
+
+        resize = {
+            -- Important: disable plugin defaults because we define them above.
+            enable_default_keybindings = false,
+
+            resize_step_x = 1,
+            resize_step_y = 1,
+        },
+
+        swap = {
+            cycle_navigation = false,
+
+            -- Important: disable plugin defaults because we define them above.
+            enable_default_keybindings = false,
+        },
+    },
+}
