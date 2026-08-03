@@ -6,14 +6,14 @@
 	ci = commit
 	st = status
 [init]
-	defaultBranch = master
+	defaultBranch = main
 [pull]
 	rebase = true 			 # Rebase (instead of merge) on pull
 [push]
 	autoSetupRemote = true   # Automatically set upstream branch on push
 [diff]
 	algorithm = histogram    # Clearer diffs on moved/edited lines
-	colorMoved = plain       # Highlight moved blocks in diffs
+	colorMoved = default
 	mnemonicPrefix = true    # More intuitive refs in diff output
 [commit]
 	verbose = true           # Include diff comment in commit message template
@@ -35,3 +35,23 @@
 	format = ssh
 [gpg "ssh"]
 	program = /opt/1Password/op-ssh-sign
+[safe]
+	directory = /home/zack/.sshfs/nas/apps/huly
+	directory = /home/zack/.sshfs/nas_mnt_SSDs/apps/huly
+	directory = /home/zack/.sshfs/nas_mnt_SSDs/apps/OTEL
+[coderabbit]
+	machineId = cli/3baa40affab44bb8be5ff2f8d7df1507
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[core]
+	pager = hunk pager
+[interactive]
+	diffFilter =  hunk diff
+[merge]
+	conflictstyle = zdiff3
+[color]
+	ui = auto

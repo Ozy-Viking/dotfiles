@@ -17,6 +17,9 @@ return {
             "flake8",
             "tinymist",
             "biome",
+            -- Rust watcher diagnostics
+            "bacon",
+            "bacon-ls",
         },
     },
     ---@param opts MasonSettings | {ensure_installed: string[]}
@@ -32,8 +35,6 @@ return {
                 })
             end, 100)
         end)
-
-
 
         mr.refresh(function()
             for _, tool in ipairs(opts.ensure_installed) do

@@ -58,14 +58,21 @@ return {
                     function()
                         require("opencode").toggle()
                     end,
-                    desc = "Toggle opencode",
+                    desc = "Toggle opencode (right)",
                 },
                 {
-                    "<leader>a.",
+                    "<leader>ad",
                     function()
-                        require("opencode").toggle()
+                        Snacks.terminal.toggle("opencode", { win = { position = "bottom", height = 0.4 } })
                     end,
-                    desc = "Toggle opencode",
+                    desc = "Toggle opencode (bottom)",
+                },
+                {
+                    "<leader>au",
+                    function()
+                        Snacks.terminal.toggle("opencode", { win = { position = "top", height = 0.4 } })
+                    end,
+                    desc = "Toggle opencode (top)",
                 },
             },
         })

@@ -12,7 +12,7 @@ return {
         },
     },
     opts_extend = { "servers.*.keys" },
-    opts = function()
+    opts = function(_, ret)
         -- See `:h vim.filetype.add()` for more info
         vim.filetype.add({
             -- Match by filename
@@ -35,7 +35,7 @@ return {
         })
         local util = require("lspconfig.util")
         ---@class PluginLspOpts
-        local ret = {
+        ret = vim.tbl_deep_extend("force", ret, {
             -- options for vim.diagnostic.config()
             ---@type vim.diagnostic.Opts
             diagnostics = {
@@ -199,6 +199,19 @@ return {
                         settings = {},
                     },
                 },
+                markdown_oxide = {
+                    mason = false,
+                    cmd = { "markdown-oxide" },
+                    filetypes = { "markdown" },
+                    root_markers = { ".git", ".obsidian", ".moxide.toml" },
+                    capabilities = vim.tbl_deep_extend("force", vim.lsp.protocol.make_client_capabilities(), {
+                        workspace = {
+                            didChangeWatchedFiles = {
+                                dynamicRegistration = true,
+                            },
+                        },
+                    }),
+                },
                 tinymist = {
                     keys = {
                         { "<leader>to", "<cmd>OpenPdf<cr>", desc = "Typst Open Pdf" },
@@ -257,7 +270,7 @@ return {
                 -- Specify * to use this function as a fallback for any server
                 -- ["*"] = function(server, opts) end,
             },
-        }
+        })
         return ret
     end,
     ---@param opts PluginLspOpts
@@ -373,33 +386,5 @@ return {
                 automatic_enable = { exclude = mason_exclude },
             })
         end
-        require("lspconfig")["tinymist"].setup({ -- Alternatively, can be used `vim.lsp.config["tinymist"]`
-
-            -- ...
-
-            on_attach = function(client, bufnr)
-                vim.keymap.set("n", "<leader>tp", function()
-                    client:exec_cmd({
-
-                        title = "pin",
-
-                        command = "tinymist.pinMain",
-
-                        arguments = { vim.api.nvim_buf_get_name(0) },
-                    }, { bufnr = bufnr })
-                end, { desc = "[T]inymist [P]in", noremap = true })
-
-                vim.keymap.set("n", "<leader>tu", function()
-                    client:exec_cmd({
-
-                        title = "unpin",
-
-                        command = "tinymist.pinMain",
-
-                        arguments = { vim.v.null },
-                    }, { bufnr = bufnr })
-                end, { desc = "[T]inymist [U]npin", noremap = true })
-            end,
-        })
     end),
 }

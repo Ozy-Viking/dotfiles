@@ -1,10 +1,6 @@
 -- Options are automatically loaded before lazy.nvim startup
 -- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
 -- Add any additional options here
-vim.cmd("set expandtab")
-vim.cmd("set tabstop=4")
-vim.cmd("set softtabstop=4")
-vim.cmd("set shiftwidth=4")
 
 vim.opt.number = true
 vim.opt.relativenumber = true
@@ -61,15 +57,16 @@ vim.opt.scrolloff = 10
 
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
 
 -- Enable this option to avoid conflicts with Prettier.
 vim.g.lazyvim_prettier_needs_config = true
 
--- set to `true` to follow the main branch
--- you need to have a working rust toolchain to build the plugin
--- in this case.
-vim.g.lazyvim_blink_main = true
-
 -- In case you don't want to use `:LazyExtras`,
 -- then you need to set the option below.
 vim.g.lazyvim_picker = "fzf"
+
+-- Rust diagnostics/checker backend.
+-- rust-analyzer still provides completion, hover, goto definition, inlay hints, etc.
+vim.g.lazyvim_rust_diagnostics = "bacon-ls"

@@ -65,10 +65,17 @@
 		"on-click-right": "alacritty"
 	},
 	"clock": {
-		"format": "{:L%A %H:%M}",
+		"format": "{:L%A %d %b %H:%M}",
 		"format-alt": "{:L%d %B W%V %Y}",
 		"tooltip": false,
 		"on-click-right": "omarchy-launch-floating-terminal-with-presentation omarchy-tz-select"
+	},
+	"custom/weather": {
+		"exec": "$OMARCHY_PATH/default/waybar/weather.sh",
+		"return-type": "json",
+		"interval": 60,
+		"tooltip": false,
+		"on-click": "notify-send -u low \"$(omarchy-weather-status)\""
 	},
 	"network": {
 		"format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
@@ -76,8 +83,8 @@
 		"format-wifi": "{icon}",
 		"format-ethernet": "󰀂",
 		"format-disconnected": "󰤮",
-		"tooltip-format-wifi": "{essid} ({frequency} GHz)\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
-		"tooltip-format-ethernet": "⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
+		"tooltip-format-wifi": "{essid} ({frequency} GHz)",
+		"tooltip-format-ethernet": "Connected",
 		"tooltip-format-disconnected": "Disconnected",
 		"interval": 3,
 		"spacing": 1,
@@ -97,6 +104,7 @@
 		"tooltip-format-charging": "{power:>1.0f}W↑ {capacity}%",
 		"interval": 5,
 		"on-click": "omarchy-menu power",
+		"on-click-right": "notify-send -u low \"$(omarchy-battery-status)\"",
 		"states": {
 			"warning": 20,
 			"critical": 10
@@ -112,30 +120,24 @@
 		"on-click": "omarchy-launch-bluetooth"
 	},
 	"pulseaudio": {
-		// "format": "{icon}",
 		"on-click": "omarchy-launch-audio",
 		"on-click-right": "pamixer -t",
 		"tooltip-format": "Playing at {volume}%",
 		"scroll-step": 5,
-		// "format-muted": "",
-		//		"format-icons": {
-		//			"headphone": "",
-		//			"default": ["", "", ""]
-		//		},
-		"format": "{icon}  {volume}% {format_source}",
-		"format-bluetooth": "{volume}% {icon} {format_source}",
-		"format-bluetooth-muted": " {icon} {format_source}",
-		"format-muted": " {format_source}",
+		"format": "{icon} {volume}% {format_source}",
+		"format-bluetooth": "{icon} {volume}% {format_source} ",
+		"format-bluetooth-muted": " 0% {format_source} ",
+		"format-muted": " 0% {format_source}",
 		"format-source": "{volume}% ",
 		"format-source-muted": "<span color='#ff0000'>0% </span>",
 		"format-icons": {
 			"headphone": " ",
-			"hands-free": " ",
-			"headset": " ",
+			"hands-free": "",
 			"phone": " ",
 			"portable": " ",
 			"car": " ",
-			"default": ["", "", ""]
+			"headset": "",
+			"default": ["", "", " "]
 		}
 	},
 	"group/tray-expander": {
@@ -155,7 +157,7 @@
 		"on-scroll-right": ""
 	},
 	"custom/screenrecording-indicator": {
-		"on-click": "omarchy-cmd-screenrecord",
+		"on-click": "omarchy-capture-screenrecording",
 		"exec": "$OMARCHY_PATH/default/waybar/indicators/screen-recording.sh",
 		"signal": 8,
 		"return-type": "json"
@@ -172,6 +174,18 @@
 		"tooltip": true,
 		"on-click-right": "omarchy-voxtype-config",
 		"on-click": "omarchy-voxtype-model"
+	},
+	"custom/idle-indicator": {
+		"on-click": "omarchy-toggle-idle",
+		"exec": "$OMARCHY_PATH/default/waybar/indicators/idle.sh",
+		"signal": 9,
+		"return-type": "json"
+	},
+	"custom/notification-silencing-indicator": {
+		"on-click": "omarchy-toggle-notification-silencing",
+		"exec": "$OMARCHY_PATH/default/waybar/indicators/notification-silencing.sh",
+		"signal": 10,
+		"return-type": "json"
 	},
 	"tray": {
 		"icon-size": 12,

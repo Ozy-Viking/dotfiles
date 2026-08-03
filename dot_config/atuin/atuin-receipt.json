@@ -8,7 +8,7 @@
 	"modify_path": true,
 	"provider": {
 		"source": "cargo-dist",
-		"version": "0.30.3"
+		"version": "0.31.0"
 	},
 	"source": {
 		"app_name": "atuin",
@@ -16,5 +16,5 @@
 		"owner": "atuinsh",
 		"release_type": "github"
 	},
-	"version": "18.12.0"
+	"version": "18.16.1"
 }

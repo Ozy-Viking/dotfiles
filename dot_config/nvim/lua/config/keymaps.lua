@@ -44,11 +44,11 @@ vim.api.nvim_set_keymap("n", "<F6>", "<cmd>CompilerOpen<CR>", { noremap = true, 
 
 -- Redo last selected option
 vim.api.nvim_set_keymap(
-  "n",
-  "<S-F6>",
-  "<cmd>CompilerStop<CR>" -- (Optional, to dispose all tasks before redo)
-  .. "<cmd>CompilerRedo<CR>",
-  { noremap = true, silent = true }
+    "n",
+    "<S-F6>",
+    "<cmd>CompilerStop<CR>" -- (Optional, to dispose all tasks before redo)
+        .. "<cmd>CompilerRedo<CR>",
+    { noremap = true, silent = true }
 )
 
 -- Toggle compiler results
@@ -61,11 +61,11 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 
-vim.keymap.set("n", "<A-j>", "<cmd>m .+1<CR>==", { desc = "Move line down" })
-vim.keymap.set("n", "<A-k>", "<cmd>m .-2<CR>==", { desc = "Move line up" })
-vim.keymap.set("n", "<leader>mk", "<cmd>m .-2<CR>==", { desc = "[M]ove line up" })
-vim.keymap.set("n", "<leader>mj", "<cmd>m .+1<CR>==", { desc = "[M]ove line down" })
+-- vim.keymap.set("n", "<A-j>", "<cmd>m .+1<CR>==", { desc = "Move line down" })
+-- vim.keymap.set("n", "<A-k>", "<cmd>m .-2<CR>==", { desc = "Move line up" })
+-- vim.keymap.set("n", "<leader>mk", "<cmd>m .-2<CR>==", { desc = "[M]ove line up" })
+-- vim.keymap.set("n", "<leader>mj", "<cmd>m .+1<CR>==", { desc = "[M]ove line down" })
 -- vim.keymap.set("v", "<leader>mk", "<cmd>m '<-2<CR>gv=gv", { desc = "[M]ove line up" })
 -- vim.keymap.set("v", "<leader>mj", "<cmd>m '>+1<CR>gv=gv", { desc = "[M]ove line down" })
 --
-vim.keymap.set("n", "|", "<Cmd>Neotree<CR>")
+-- vim.keymap.set("n", "|", "<Cmd>Neotree<CR>")
