@@ -48,3 +48,24 @@ vim.api.nvim_create_user_command("OpenPdf", function()
         vim.system({ "xdg-open", pdf_path })
     end
 end, {})
+
+local function set_omarchy_separator_color()
+	local colors_file = vim.fn.expand("~/.local/state/omarchy/current/theme/colors.toml")
+	if not vim.uv.fs_stat(colors_file) then
+		return
+	end
+	for _, line in ipairs(vim.fn.readfile(colors_file)) do
+		local muted = line:match("^%s*muted%s*=%s*\"#([0-9a-fA-F]+)\"")
+		if muted then
+			vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#" .. muted })
+			break
+		end
+	end
+end
+
+set_omarchy_separator_color()
+
+vim.api.nvim_create_autocmd("ColorScheme", {
+	desc = "Tint window separators with the Omarchy theme muted color",
+	callback = set_omarchy_separator_color,
+})
