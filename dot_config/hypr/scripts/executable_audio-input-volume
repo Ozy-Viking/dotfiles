@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Control microphone (input) volume and show the Omarchy OSD.
+# Usage: audio-input-volume <raise|lower|mute-toggle>
+
+action="${1:-}"
+source_device="@DEFAULT_AUDIO_SOURCE@"
+
+volume_percent() {
+  wpctl get-volume "$source_device" 2>/dev/null |
+    awk 'NR == 1 && $1 == "Volume:" { printf "%.0f", $2 * 100 }'
+}
+
+muted() {
+  wpctl get-volume "$source_device" 2>/dev/null | grep -q MUTED
+}
+
+case "$action" in
+  raise) wpctl set-volume "$source_device" 5%+ ;;
+  lower) wpctl set-volume "$source_device" 5%- ;;
+  mute-toggle) wpctl set-mute "$source_device" toggle ;;
+  *)
+    echo "Usage: audio-input-volume <raise|lower|mute-toggle>" >&2
+    exit 1
+    ;;
+esac
+
+if muted; then
+  omarchy-osd -i microphone-muted -m "Microphone muted"
+else
+  omarchy-osd -i microphone -p "$(volume_percent)"
+fi

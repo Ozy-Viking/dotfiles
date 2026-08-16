@@ -69,6 +69,10 @@ if [[ $- == *i* ]] && command -v dns >/dev/null 2>&1; then
   source <(dns completions bash)
 fi
 
+if command -v rustup >/dev/null 2>&1; then
+  source <(rustup completions bash rustup)
+fi
+
 if [[ $- == *i* && -f "$OMARCHY_PATH/default/bash/inputrc" ]]; then
   bind -f "$OMARCHY_PATH/default/bash/inputrc"
 fi

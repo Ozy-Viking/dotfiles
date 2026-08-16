@@ -80,7 +80,7 @@ if [[ -t 0 && -t 1 ]] && command -v fzf >/dev/null 2>&1; then
 fi
 
 if command -v opencode >/dev/null 2>&1; then
-  source <(opencode completion zsh)
+  source <(SHELL=/usr/bin/zsh opencode completion)
   compdef _opencode_yargs_completions c 2>/dev/null || true
 fi
 
@@ -106,6 +106,11 @@ fi
 if command -v diesel >/dev/null 2>&1; then
   source <(diesel completions zsh)
 fi
+
+if command -v rustup >/dev/null 2>&1; then
+  source <(rustup completions zsh rustup)
+fi
+
 _omarchy() {
   emulate -L zsh
   local cur prefix omarchy_path bin_dir file basename rest next args enum
