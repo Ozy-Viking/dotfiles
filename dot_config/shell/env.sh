@@ -13,7 +13,11 @@ if [ -r "$HOME/.cargo/env" ]; then
   . "$HOME/.cargo/env"
 fi
 
-export OMARCHY_PATH="$HOME/.local/share/omarchy"
+# Respect the system default (set by /etc/profile.d/omarchy.sh -> env-bootstrap
+# or the uwsm session). Forcing the ~/.local/share/omarchy symlink path here
+# breaks qs ipc instance matching, which does not resolve symlinks.
+: "${OMARCHY_PATH:=/usr/share/omarchy}"
+export OMARCHY_PATH
 
 case ":${PATH}:" in
   *:"$OMARCHY_PATH/bin":*) ;;
