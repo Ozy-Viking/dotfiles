@@ -16,7 +16,7 @@ Host ai
     HostName 10.5.5.215
 
 Host laptop
-    HostName 10.2.35.78
+    HostName 10.2.35.77
 
 Host dokploy
     HostName 10.5.63.237

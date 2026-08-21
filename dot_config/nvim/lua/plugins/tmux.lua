@@ -1,6 +1,10 @@
 return {
     "aserowy/tmux.nvim",
 
+    cond = function()
+        return vim.env.HERDR_PANE_ID == nil
+    end,
+
     keys = {
         -- Navigation: Ctrl + h/j/k/l
         {

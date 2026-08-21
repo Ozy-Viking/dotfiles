@@ -1,3 +1,7 @@
 [[ -r "$HOME/.config/shell/env.sh" ]] && source "$HOME/.config/shell/env.sh"
 [[ -r "$HOME/.config/shell/interactive.sh" ]] && source "$HOME/.config/shell/interactive.sh"
 [[ -r "$HOME/.config/shell/zsh.zsh" ]] && source "$HOME/.config/shell/zsh.zsh"
+
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

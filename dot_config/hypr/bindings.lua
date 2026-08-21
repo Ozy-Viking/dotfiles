@@ -2,10 +2,11 @@
 -- Defaults load first in hyprland.lua; only differences/conflicts live here.
 
 -- Applications
-o.bind("SUPER + SHIFT + T", "New herdr session", "uwsm-app -- xdg-terminal-exec herdr")
+-- o.bind("SUPER + SHIFT + T", "New herdr session", "uwsm-app -- xdg-terminal-exec herdr")
+o.bind("SUPER + SHIFT + T", "Herdr", { omarchy = "terminal-herdr" })
 o.bind("SUPER + ALT + T", "Terminal", "uwsm app -- ghostty")
 hl.unbind("SUPER + ALT + RETURN") -- default: Tmux
-o.bind("SUPER + ALT + RETURN", "Herdr", { omarchy = "terminal-herdr" })
+-- o.bind("SUPER + ALT + RETURN", "Herdr", { omarchy = "terminal-herdr" })
 hl.unbind("SUPER + SHIFT + M") -- default: Music (Spotify)
 o.bind("SUPER + SHIFT + M", "Music", { webapp = "https://music.youtube.com/", focus = "^YouTube Music$" })
 hl.unbind("SUPER + SHIFT + X") -- default: X webapp
@@ -14,7 +15,11 @@ o.bind("SUPER + SHIFT + I", "ChatGPT", { webapp = "https://chatgpt.com" })
 
 -- Screenshot editor replaces the default Google Maps (preinstalled) binding.
 hl.unbind("SUPER + SHIFT + S")
-o.bind("SUPER + SHIFT + S", "Screenshot editor", "bash -lc 'file=\"$(omarchy-capture-screenshot smart save)\" && [[ -n $file ]] && satty --filename \"$file\" --output-filename \"$file\"'")
+o.bind(
+	"SUPER + SHIFT + S",
+	"Screenshot editor",
+	'bash -lc \'file="$(omarchy-capture-screenshot smart save)" && [[ -n $file ]] && satty --filename "$file" --output-filename "$file"\''
+)
 
 -- Launcher / menus
 o.bind("SUPER + A", "Launch apps", "omarchy-menu toggle apps")
@@ -31,8 +36,18 @@ o.bind("SHIFT + mouse:277", "Resize window", hl.dsp.window.resize(), { mouse = t
 -- Mic (input) volume on SHIFT + media keys.
 hl.unbind("SHIFT + XF86AudioMute") -- default: Switch audio output
 o.bind("SHIFT + XF86AudioMute", "Mic mute toggle", "omarchy-audio-input-mute", { locked = true })
-o.bind("SHIFT + XF86AudioRaiseVolume", "Mic volume up", "$HOME/.config/hypr/scripts/audio-input-volume raise", { locked = true, repeating = true })
-o.bind("SHIFT + XF86AudioLowerVolume", "Mic volume down", "$HOME/.config/hypr/scripts/audio-input-volume lower", { locked = true, repeating = true })
+o.bind(
+	"SHIFT + XF86AudioRaiseVolume",
+	"Mic volume up",
+	"$HOME/.config/hypr/scripts/audio-input-volume raise",
+	{ locked = true, repeating = true }
+)
+o.bind(
+	"SHIFT + XF86AudioLowerVolume",
+	"Mic volume down",
+	"$HOME/.config/hypr/scripts/audio-input-volume lower",
+	{ locked = true, repeating = true }
+)
 
 -- HJKL focus / swap
 hl.unbind("SUPER + H")

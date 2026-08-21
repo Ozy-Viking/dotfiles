@@ -1,5 +1,9 @@
 model = "gpt-5.6-sol"
 model_reasoning_effort = "high"
+
+[sandbox_workspace_write]
+writable_roots = ["/home/zack/Documents/AI/errors/incidents"]
+
 [plugins."github@openai-curated"]
 enabled = true
 
@@ -33,6 +37,37 @@ trust_level = "trusted"
 [projects."/home/zack/Coding/Ozy-Viking"]
 trust_level = "trusted"
 
+[projects."/home/zack/Coding/NeuroNotes/dioxus-testing/.git/modules"]
+trust_level = "trusted"
+
+[projects."/home/zack/Coding/NeuroNotes/dioxus-testing/docs"]
+trust_level = "trusted"
+
+[projects."/home/zack"]
+trust_level = "trusted"
+
+[projects."/home/zack/Coding/Capstone"]
+trust_level = "trusted"
+
+[projects."/home/zack/Coding/impeccable-dioxus"]
+trust_level = "trusted"
+
+[projects."/home/zack/Coding/NeuroNotes"]
+trust_level = "trusted"
+
+[projects."/home/zack/.config"]
+trust_level = "trusted"
+
+[projects."/home/zack/Coding/NeuroNotes/app"]
+trust_level = "trusted"
+
+[projects."/home/zack/Coding/Capstone/pqlrs-wasm"]
+trust_level = "trusted"
+
+[tui]
+status_line = ["model-with-reasoning", "current-dir", "model", "reasoning", "project-name", "git-branch"]
+status_line_use_colors = true
+
 [tui.model_availability_nux]
 "gpt-5.5" = 3
 "gpt-5.6-sol" = 1
@@ -45,8 +80,12 @@ args = ["run", "--manifest-path", "/home/zack/Coding/dnsync/Cargo.toml", "--", "
 command = "npx"
 args = ["@playwright/mcp@latest", "--config", "/home/zack/.config/opencode/playwright-mcp.json"]
 env_vars = ["DISPLAY", "WAYLAND_DISPLAY", "XAUTHORITY", "XDG_RUNTIME_DIR"]
+
 [mcp_servers.linear]
 url = "https://mcp.linear.app/mcp"
+
+[mcp_servers.openaiDeveloperDocs]
+url = "https://developers.openai.com/mcp"
 [hooks.state]
 
 [hooks.state."/home/zack/.codex/hooks.json:pre_tool_use:0:0"]
@@ -58,7 +97,12 @@ trusted_hash = "sha256:ac371f260e4b23ba1d1b7a4ad68a44a323a8470b61f38471a47aceac1
 [hooks.state."/home/zack/.codex/hooks.json:session_start:0:0"]
 trusted_hash = "sha256:374cca802e4448fc3ab0cfa30614a1693869f00393a31204775cbcfbdedbb156"
 
+[hooks.state."/home/zack/Coding/NeuroNotes/app/.codex/hooks.json:post_tool_use:0:0"]
+trusted_hash = "sha256:abb593997f4d963ba6c5e3feaf706f7b6d46164bbbd148ed3f501b26d46bea28"
+
+[hooks.state."/home/zack/Coding/NeuroNotes/app/.codex/hooks.json:stop:0:0"]
+trusted_hash = "sha256:9d6e52a8bb50cec2359d094bc8e6c5a3444301e040526403d407cb0a3841fbc4"
+
 [features]
 hooks = true
 experimental_use_rmcp_client = true
-
