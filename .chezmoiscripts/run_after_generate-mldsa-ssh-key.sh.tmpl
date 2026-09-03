@@ -1,0 +1,24 @@
+#!/bin/sh
+
+set -eu
+
+key="$HOME/.ssh/id_mldsa44_ed25519"
+comment="{{ .chezmoi.username }}@{{ .chezmoi.hostname }}"
+
+if [ -f "$key" ]; then
+    exit 0
+fi
+
+if ! ssh -Q key | grep -qx 'ssh-mldsa44-ed25519@openssh.com'; then
+    echo "OpenSSH does not support mldsa44-ed25519; skipping" >&2
+    exit 0
+fi
+
+mkdir -p "$HOME/.ssh"
+chmod 700 "$HOME/.ssh"
+
+ssh-keygen \
+    -t mldsa44-ed25519 \
+    -C "$comment" \
+    -f "$key" \
+    -N ''
