@@ -1,5 +1,10 @@
 Host *
-	IdentityAgent ~/.1password/agent.sock
+    KexAlgorithms ^mlkem768x25519-sha256,sntrup761x25519-sha512
+    HostKeyAlgorithms ^ssh-mldsa44-ed25519
+    PubkeyAcceptedAlgorithms ^ssh-mldsa44-ed25519
+    Ciphers ^chacha20-poly1305@openssh.com,aes256-gcm@openssh.com
+    IdentityFile ~/.ssh/id_mldsa44_ed25519
+    IdentityAgent ~/.1password/agent.sock
 
 Host rpi1
     HostName 10.5.0.53
