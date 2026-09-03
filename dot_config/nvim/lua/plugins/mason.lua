@@ -11,6 +11,7 @@ return {
             "clangd",
             "markdownlint",
             "mypy",
+            "ty",
             "isort",
             "debugpy",
             "codespell",

@@ -34,6 +34,66 @@ return {
             },
         })
         local util = require("lspconfig.util")
+        local python_environment_state = {}
+
+        local function python_environment_fingerprint(root_dir)
+            local paths = {
+                vim.fs.joinpath(root_dir, "pyproject.toml"),
+                vim.fs.joinpath(root_dir, "uv.lock"),
+                vim.fs.joinpath(root_dir, ".venv", "pyvenv.cfg"),
+            }
+            vim.list_extend(
+                paths,
+                vim.fn.glob(vim.fs.joinpath(root_dir, ".venv", "lib", "python*", "site-packages"), false, true)
+            )
+            table.sort(paths)
+
+            return table.concat(
+                vim.tbl_map(function(path)
+                    local stat = vim.uv.fs_stat(path)
+                    if not stat then
+                        return path .. ":missing"
+                    end
+                    return string.format("%s:%d:%d", path, stat.mtime.sec, stat.mtime.nsec)
+                end, paths),
+                "\n"
+            )
+        end
+
+        local function remember_python_environment(client)
+            if client.root_dir then
+                python_environment_state[client.root_dir] = python_environment_fingerprint(client.root_dir)
+            end
+        end
+
+        vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained" }, {
+            group = vim.api.nvim_create_augroup("python-environment-refresh", { clear = true }),
+            callback = function(args)
+                if vim.bo[args.buf].filetype ~= "python" then
+                    return
+                end
+
+                for _, client in ipairs(vim.lsp.get_clients({ bufnr = args.buf, name = "ty" })) do
+                    local root_dir = client.root_dir
+                    if root_dir then
+                        local previous = python_environment_state[root_dir]
+                        local current = python_environment_fingerprint(root_dir)
+                        python_environment_state[root_dir] = current
+                        if previous and previous ~= current then
+                            for buffer in pairs(client.attached_buffers) do
+                                vim.diagnostic.reset(vim.lsp.diagnostic.get_namespace(client.id), buffer)
+                                client:_provider_foreach("textDocument/diagnostic", function(capability)
+                                    local namespace =
+                                        vim.lsp.diagnostic.get_namespace(client.id, true, capability.identifier)
+                                    vim.diagnostic.reset(namespace, buffer)
+                                end)
+                            end
+                            client:_restart()
+                        end
+                    end
+                end
+            end,
+        })
         ---@class PluginLspOpts
         ret = vim.tbl_deep_extend("force", ret, {
             -- options for vim.diagnostic.config()
@@ -147,6 +207,12 @@ return {
                     },
                 },
                 stylua = { enabled = false },
+                ty = {
+                    on_attach = remember_python_environment,
+                    keys = {
+                        { "<leader>cP", "<cmd>LspRestart ty<cr>", desc = "Restart Python LSP" },
+                    },
+                },
                 lua_ls = {
                     -- mason = false, -- set to false if you don't want this server to be installed with mason
                     -- Use this to add any additional keymaps

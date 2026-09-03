@@ -5,6 +5,8 @@
 	br = branch
 	ci = commit
 	st = status
+	zip = "!f() { root=$(git rev-parse --show-toplevel) || exit; name=$(basename \"$root\"); out=\"$(dirname \"$root\")/$name.zip\"; rm -f \"$out\"; git -C \"$root\" ls-files -co --exclude-standard | (cd \"$root\" && zip \"$out\" -@); }; f"
+	zip-all = "!f() { root=$(git rev-parse --show-toplevel) || exit; name=$(basename \"$root\"); out=\"$(dirname \"$root\")/$name.zip\"; rm -f \"$out\"; git -C \"$root\" ls-files -co --exclude-standard | (cd \"$root\" && zip \"$out\" -@); (cd \"$root\" && zip -r \"$out\" .git); }; f"
 [init]
 	defaultBranch = main
 [pull]

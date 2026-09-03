@@ -64,6 +64,9 @@ vim.opt.expandtab = true
 -- Enable this option to avoid conflicts with Prettier.
 vim.g.lazyvim_prettier_needs_config = true
 
+-- Format files with their configured formatter before saving.
+vim.g.autoformat = true
+
 -- In case you don't want to use `:LazyExtras`,
 -- then you need to set the option below.
 vim.g.lazyvim_picker = "fzf"
@@ -71,3 +74,6 @@ vim.g.lazyvim_picker = "fzf"
 -- Rust diagnostics/checker backend.
 -- rust-analyzer still provides completion, hover, goto definition, inlay hints, etc.
 vim.g.lazyvim_rust_diagnostics = "bacon-ls"
+
+-- ty provides Python missing-import code actions that standalone Pyright lacks.
+vim.g.lazyvim_python_lsp = "ty"
