@@ -6,4 +6,6 @@
 [[ -r "$HOME/.config/shell/bash.sh" ]] && source "$HOME/.config/shell/bash.sh"
 
 # Vite+ bin (https://viteplus.dev)
-. "$HOME/.config/vite-plus/env"
+if [ -r "$HOME/.config/vite-plus/env" ]; then
+  . "$HOME/.config/vite-plus/env"
+fi
