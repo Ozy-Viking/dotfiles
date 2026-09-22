@@ -1,5 +1,6 @@
-model = "gpt-5.6-sol"
-model_reasoning_effort = "high"
+model = "gpt-6-astra"
+model_reasoning_effort = "medium"
+service_tier = "default"
 
 [sandbox_workspace_write]
 writable_roots = ["/home/zack/Documents/AI/errors/incidents"]
@@ -103,6 +104,24 @@ trust_level = "trusted"
 [projects."/home/zack/Coding/Capstone/pqlrs"]
 trust_level = "trusted"
 
+[projects."/home/zack/Coding/editor"]
+trust_level = "trusted"
+
+[projects."/home/zack/Coding/docs.rs"]
+trust_level = "trusted"
+
+[projects."/home/zack/Coding/t3code"]
+trust_level = "trusted"
+
+[projects."/home/zack/Coding/ferriswatch"]
+trust_level = "trusted"
+
+[projects."/home/zack/Documents/Long Running Issues"]
+trust_level = "trusted"
+
+[projects."/home/zack/Coding/rust/kora"]
+trust_level = "trusted"
+
 [tui]
 status_line = ["model-with-reasoning", "current-dir", "model", "reasoning", "project-name", "git-branch"]
 status_line_use_colors = true
@@ -127,25 +146,27 @@ url = "https://mcp.linear.app/mcp"
 url = "https://developers.openai.com/mcp"
 
 [mcp_servers.node_repl]
+args = []
 command = "/usr/lib/chatgpt/resources/cua_node/bin/node_repl"
-startup_timeout_sec = 120.0
+startup_timeout_sec = 120
 
 [mcp_servers.node_repl.env]
-BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
-BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-BROWSER_USE_CODEX_APP_VERSION = "26.814.41957"
-CODEX_CLI_PATH = "/usr/lib/chatgpt/resources/codex"
-CODEX_HOME = "/home/zack/.codex"
-NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
-NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
 NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
 NODE_REPL_NODE_MODULE_DIRS = "/usr/lib/chatgpt/resources/cua_node/lib/node_modules"
 NODE_REPL_NODE_PATH = "/usr/lib/chatgpt/resources/cua_node/bin/node"
 NODE_REPL_TRUSTED_CODE_PATHS = "/home/zack/.codex:/usr/lib/chatgpt/resources/cua_node/lib/node_modules"
-NODE_REPL_TRUSTED_SERVICES = '{"browser":"/home/zack/.codex/plugins/cache/openai-bundled/browser/26.814.41957/scripts/browser-service.mjs"}'
+CODEX_HOME = "/home/zack/.codex"
+BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
+BROWSER_USE_TINYSKY_ENABLED = "1"
+NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = ""
+NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = ""
+BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
+BROWSER_USE_CODEX_APP_VERSION = "26.901.51231"
+NODE_REPL_TRUSTED_SERVICES = '{"browser":"/home/zack/.codex/plugins/cache/openai-bundled/browser/26.901.51231/scripts/browser-service.mjs"}'
+CODEX_CLI_PATH = "/usr/lib/chatgpt/resources/codex"
 
 [mcp_servers.supabase]
-url = "https://mcp.supabase.com/mcp?project_ref=wjzmonhxflrsgzgyfgir"
+url = "https://mcp.supabase.com/mcp?project_ref=wjzmonhxflrsgzgyfgir&read_only=true&features=docs%2Caccount%2Cdatabase%2Cdebugging%2Cdevelopment%2Cfunctions%2Cbranching%2Cstorage"
 
 
 [hooks.state]
@@ -168,27 +189,39 @@ trusted_hash = "sha256:9d6e52a8bb50cec2359d094bc8e6c5a3444301e040526403d407cb0a3
 [hooks.state."impeccable@openai-curated-remote:hooks/hooks.json:post_tool_use:0:0"]
 trusted_hash = "sha256:201e11501b0ca8f80e07f86c56e49287ddae17b7008372aa840e2e0280221440"
 
+[hooks.state."/home/zack/Coding/NeuroNotes/dioxus-testing/.codex/hooks.json:post_tool_use:0:0"]
+trusted_hash = "sha256:abb593997f4d963ba6c5e3feaf706f7b6d46164bbbd148ed3f501b26d46bea28"
+
+[hooks.state."/home/zack/Coding/NeuroNotes/dioxus-testing/.codex/hooks.json:stop:0:0"]
+trusted_hash = "sha256:9d6e52a8bb50cec2359d094bc8e6c5a3444301e040526403d407cb0a3841fbc4"
+
 [features]
 hooks = true
 experimental_use_rmcp_client = true
 js_repl = false
 
 [marketplaces.openai-bundled]
-last_updated = "2026-08-21T10:17:51Z"
 source_type = "local"
 source = "/home/zack/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
 [marketplaces.openai-primary-runtime]
-last_updated = "2026-08-21T10:18:14Z"
 source_type = "local"
 source = "/home/zack/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
 
 [desktop]
-conversationDetailMode = "STEPS_COMMANDS"
+conversationDetailMode = "STEPS_PROSE"
 ambient-suggestions-enabled = true
+followUpQueueMode = "queue"
+toys-confetti-enabled = true
+git-branch-prefix = ""
+worktree-upstream-refresh-mode = "best-effort"
+git-worktree-root = "/home/zack/.local/share/worktrees"
 
 [plugins."supabase@plugins-cli"]
 enabled = true
 
 [plugins."supabase@personal"]
+enabled = true
+
+[plugins."unified-computer-use@openai-bundled"]
 enabled = true

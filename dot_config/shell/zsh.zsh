@@ -100,6 +100,10 @@ if command -v typst >/dev/null 2>&1; then
   source <(typst completions zsh)
 fi
 
+if command -v tod >/dev/null 2>&1; then
+  source <(tod completion zsh)
+fi
+
 if command -v chezmoi >/dev/null 2>&1; then
   source <(chezmoi completion zsh)
 fi

@@ -1,2 +1,5 @@
 [[ -r "$HOME/.config/shell/env.sh" ]] && source "$HOME/.config/shell/env.sh"
 [[ -r "$HOME/.bashrc" ]] && source "$HOME/.bashrc"
+
+# Vite+ bin (https://viteplus.dev)
+. "$HOME/.config/vite-plus/env"

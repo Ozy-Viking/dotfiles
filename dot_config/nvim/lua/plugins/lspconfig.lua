@@ -254,16 +254,11 @@ return {
                     },
                 },
                 fmtk_lsp = {
-                    default_config = {
-                        -- The command to start the language server
-                        cmd = { "npx", "--yes", "factoriomod-debug", "lsp", "--stdio" },
-                        -- The filetypes that the language server will be launched for
-                        filetypes = { "factorio-changelog", "factorio-locale", "lua" },
-                        -- Hints to find the project root
-                        root_dir = util.root_pattern("changelog.txt", "info.json"),
-                        -- Additional Language Server settings can be added here
-                        settings = {},
-                    },
+                    cmd = { "npx", "--yes", "factoriomod-debug", "lsp", "--stdio" },
+                    filetypes = { "factorio-changelog", "factorio-locale", "lua" },
+                    root_markers = { "changelog.txt", "info.json" },
+                    workspace_required = true,
+                    settings = {},
                 },
                 markdown_oxide = {
                     mason = false,
