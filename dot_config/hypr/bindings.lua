@@ -29,8 +29,15 @@ o.bind("SUPER + SHIFT + ESCAPE", "System menu", "omarchy-menu toggle system")
 hl.unbind("SUPER + C") -- default: Universal copy
 o.bind("SUPER + C", "Calculator", "omacalc")
 
--- Mouse move/resize on button 277 (as before), alongside default SUPER+LMB/RMB.
-o.bind("mouse:277", "Move window", hl.dsp.window.drag(), { mouse = true })
+-- Middle-button drag to move, alongside default SUPER+LMB/RMB.
+hl.unbind("mouse:274")
+o.bind("mouse:274", "Move window except in Transport Fever 3", function()
+	local window = hl.get_active_window()
+	if window and window.class == "TransportFever3" then
+		return { ok = false }
+	end
+	return hl.dispatch(hl.dsp.window.drag())
+end, { mouse = true, auto_consuming = true })
 o.bind("SHIFT + mouse:277", "Resize window", hl.dsp.window.resize(), { mouse = true })
 
 -- Mic (input) volume on SHIFT + media keys.
@@ -65,3 +72,5 @@ o.bind("SUPER + ALT + K", "Swap window up", hl.dsp.window.swap({ direction = "u"
 o.bind("SUPER + ALT + L", "Swap window right", hl.dsp.window.swap({ direction = "r" }))
 o.bind("SUPER + SHIFT + K", "Show key bindings", "omarchy-menu-keybindings")
 o.bind("SUPER + SHIFT + L", "Cycle workspace layout", "$HOME/.config/hypr/scripts/cycle-workspace-layout")
+
+hl.bind("CTRL + SHIFT + 2", hl.dsp.global("com.t3tools.T3Code:capture-window"))

@@ -61,7 +61,6 @@ fi
 if command -v zoxide >/dev/null 2>&1; then
   eval "$(zoxide init zsh)"
 fi
-
 if command -v try >/dev/null 2>&1; then
   try() {
     unset -f try
@@ -79,10 +78,10 @@ if [[ -t 0 && -t 1 ]] && command -v fzf >/dev/null 2>&1; then
   fi
 fi
 
-if command -v opencode >/dev/null 2>&1; then
-  source <(SHELL=/usr/bin/zsh opencode completion)
-  compdef _opencode_yargs_completions c 2>/dev/null || true
-fi
+# if command -v opencode >/dev/null 2>&1; then
+#   source <(SHELL=/usr/bin/zsh opencode completion)
+#   compdef _opencode_yargs_completions c 2>/dev/null || true
+# fi
 
 if command -v atuin >/dev/null 2>&1; then
   source <(atuin gen-completions --shell zsh)
@@ -91,7 +90,6 @@ fi
 if [[ -t 0 && -t 1 ]] && command -v atuin >/dev/null 2>&1; then
   eval "$(atuin init zsh)"
 fi
-
 if command -v dns >/dev/null 2>&1; then
   source <(dns completions zsh)
 fi
@@ -100,8 +98,9 @@ if command -v typst >/dev/null 2>&1; then
   source <(typst completions zsh)
 fi
 
-if command -v tod >/dev/null 2>&1; then
-  source <(tod completion zsh)
+# Refresh after upgrading tod: tod completion zsh > ~/.config/shell/completions/_tod
+if [[ -r "$HOME/.config/shell/completions/_tod" ]]; then
+  source "$HOME/.config/shell/completions/_tod"
 fi
 
 if command -v chezmoi >/dev/null 2>&1; then

@@ -14,9 +14,6 @@ enabled = true
 [plugins."codex-app-tools@openai-bundled"]
 enabled = true
 
-[plugins."sites@openai-bundled"]
-enabled = true
-
 [plugins."browser@openai-bundled"]
 enabled = true
 
@@ -125,10 +122,12 @@ trust_level = "trusted"
 [tui]
 status_line = ["model-with-reasoning", "current-dir", "model", "reasoning", "project-name", "git-branch"]
 status_line_use_colors = true
+screen_reader_detection_done = true
 
 [tui.model_availability_nux]
 "gpt-5.5" = 3
 "gpt-5.6-sol" = 1
+"gpt-6.1-sol" = 3
 
 [mcp_servers.dnsync]
 command = "cargo"
@@ -161,8 +160,8 @@ BROWSER_USE_TINYSKY_ENABLED = "1"
 NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = ""
 NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = ""
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-BROWSER_USE_CODEX_APP_VERSION = "26.901.51231"
-NODE_REPL_TRUSTED_SERVICES = '{"browser":"/home/zack/.codex/plugins/cache/openai-bundled/browser/26.901.51231/scripts/browser-service.mjs"}'
+BROWSER_USE_CODEX_APP_VERSION = "26.915.31029"
+NODE_REPL_TRUSTED_SERVICES = '{"browser":"/home/zack/.codex/plugins/cache/openai-bundled/browser/26.915.31029/scripts/browser-service.mjs"}'
 CODEX_CLI_PATH = "/usr/lib/chatgpt/resources/codex"
 
 [mcp_servers.supabase]
@@ -225,3 +224,6 @@ enabled = true
 
 [plugins."unified-computer-use@openai-bundled"]
 enabled = true
+
+[agents]
+max_concurrent_threads_per_session = 8

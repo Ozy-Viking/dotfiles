@@ -6,6 +6,38 @@ vim.o.exrc = true
 vim.opt.number = true
 vim.opt.relativenumber = true
 
+-- Skip dependency, build, and cache directories before allocating LSP file watches.
+-- The inotifywait backend only filters these events after creating watches.
+-- These internal Neovim APIs may need revisiting after a Neovim upgrade.
+if vim.fn.has("linux") == 1 then
+    local watchfiles = require("vim.lsp._watchfiles")
+    local ignored_dirs = {
+        "target",
+        "node_modules",
+        "build",
+        "dist",
+        "coverage",
+        ".next",
+        ".nuxt",
+        ".output",
+        ".svelte-kit",
+        ".turbo",
+        ".parcel-cache",
+        ".venv",
+        "__pycache__",
+        ".pytest_cache",
+        ".mypy_cache",
+        ".ruff_cache",
+        ".gradle",
+        "cmake-build-*",
+    }
+    for _, dir in ipairs(ignored_dirs) do
+        watchfiles._poll_exclude_pattern = watchfiles._poll_exclude_pattern
+            + vim.glob.to_lpeg("**/" .. dir .. "{,/**}")
+    end
+    watchfiles._watchfunc = vim._watch.watchdirs
+end
+
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = "a"
 

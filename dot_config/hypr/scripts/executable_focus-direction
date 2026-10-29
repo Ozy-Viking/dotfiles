@@ -142,7 +142,7 @@ result="$(jq -r --arg direction "$direction" --arg active_address "$active_addre
       active: active_debug($active_center),
       target: null,
       isGlobalEdge: false,
-      nativeAction: "hyprctl dispatch movefocus \($direction)",
+      nativeAction: "hyprctl dispatch \"hl.dsp.focus({ direction = \\\"\($direction)\\\" })\"",
       displayedWorkspaces: $displayed_workspaces,
       orderedWindows: (if ($direction == "l" or $direction == "r") then ($by_x | map(debug_window)) else ($by_y | map(debug_window)) end)
     }
@@ -159,7 +159,7 @@ mode="$(jq -r '.mode' <<<"$result")"
 if [[ "$mode" == "global-wrap" ]]; then
   target="$(jq -r '.target.address // empty' <<<"$result")"
   [[ -n "$target" ]] || exit 0
-  hyprctl dispatch focuswindow "address:$target"
+  hyprctl dispatch "hl.dsp.focus({ window = \"address:$target\" })"
 else
-  hyprctl --batch "dispatch movefocus $direction" >/dev/null
+  hyprctl dispatch "hl.dsp.focus({ direction = \"$direction\" })"
 fi
