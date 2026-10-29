@@ -1,3 +1,5 @@
+{{- $modernBiome := glob (joinPath .chezmoi.homeDir ".local/share/nvim/lazy/LazyVim/lua/lazyvim/plugins/extras/formatting/biome.lua") -}}
+{{- $legacyBiome := glob (joinPath .chezmoi.homeDir ".local/share/nvim/lazy/LazyVim/lua/lazyvim/plugins/extras/lang/typescript/biome.lua") -}}
 {
   "extras": [
     "lazyvim.plugins.extras.coding.blink",
@@ -31,7 +33,7 @@
     "lazyvim.plugins.extras.lang.tex",
     "lazyvim.plugins.extras.lang.toml",
     "lazyvim.plugins.extras.lang.typescript",
-    "lazyvim.plugins.extras.lang.typescript.biome",
+    "{{ if and $legacyBiome (not $modernBiome) }}lazyvim.plugins.extras.lang.typescript.biome{{ else }}lazyvim.plugins.extras.formatting.biome{{ end }}",
     "lazyvim.plugins.extras.lang.typst",
     "lazyvim.plugins.extras.lang.yaml",
     "lazyvim.plugins.extras.linting.eslint",
